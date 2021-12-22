@@ -1,10 +1,30 @@
-var builder = WebApplication.CreateBuilder(args);
+using Serilog;
 
-var app = builder.Build();
-
-app.MapGet("/", () =>
+try
 {
-    app.Logger.LogInformation("POST");
-});
+    var builder = WebApplication.CreateBuilder(args);
 
-app.Run();
+    builder.Host.UseSerilog((hostContext, LoggerConfiguration) =>
+    {
+        LoggerConfiguration.ReadFrom.Configuration(hostContext.Configuration);
+    });
+
+    var app = builder.Build();
+
+    app.UseSerilogRequestLogging();
+
+    app.MapGet("/", () =>
+    {
+        app.Logger.LogInformation("**MapGet**");
+    });
+
+    app.Run();
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "WebApplication1 Failed");
+}
+finally
+{
+    Log.CloseAndFlush();
+}

@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Diagnostics;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -12,9 +11,9 @@ namespace TestProject1
         [TestMethod]
         public async Task TestMethod1()
         {
-            var application = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
+            using var application = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
 
-            var client = application.CreateClient();
+            using var client = application.CreateClient();
 
             var response = await client.GetAsync("/");
 
