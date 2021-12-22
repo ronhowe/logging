@@ -30,7 +30,12 @@ try
         app.Logger.LogDebug("**app.Logger.LogDebug()**");
         app.Logger.LogInformation("**app.Logger.LogInformation()**");
     });
-    throw new NotImplementedException("DIE");
+
+    if (app.Configuration.GetValue<bool>("MockException", false))
+    {
+        throw new NotImplementedException("**NotImplementedException()**");
+    }
+
     app.Run();
 }
 catch (Exception ex)
