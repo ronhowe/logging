@@ -1,11 +1,15 @@
 using Serilog;
 using Serilog.Events;
 
+// Match this to appsettings.json for consistency.
+const string outputTemplate = "**ConsoleTemplate** [{MachineName}] {Timestamp:HH:mm:ss.fff zzz} [{Level}] [{SourceContext}] {Message}{NewLine}{Exception}";
+
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
     .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
     .Enrich.FromLogContext()
-    .WriteTo.Console(outputTemplate: "**ConsoleTemplate** {Timestamp:HH:mm:ss.fff zzz} [{Level}] [{SourceContext}] {Message}{NewLine}{Exception}")
+    .Enrich.WithMachineName()
+    .WriteTo.Console(outputTemplate: outputTemplate)
     .CreateLogger();
 
 Log.Debug("**Log.Debug()**");
